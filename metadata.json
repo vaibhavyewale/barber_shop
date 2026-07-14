@@ -1,0 +1,6 @@
+{
+  "name": "Premium Barber Shop",
+  "description": "A luxury barber shop website with dark theme and gold accents.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
