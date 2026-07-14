@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Routes, Route } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import AdminLayout from './components/admin/AdminLayout';
 import Home from './pages/Home';
@@ -39,19 +38,6 @@ export default function App() {
           <Route path="blog" element={<Blog />} />
           <Route path="contact" element={<Contact />} />
         </Route>
-    <Routes>
-      {/* Public Routes */}
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Home />} />
-        <Route path="about" element={<About />} />
-        <Route path="services" element={<Services />} />
-        <Route path="team" element={<Team />} />
-        <Route path="gallery" element={<Gallery />} />
-        <Route path="pricing" element={<Pricing />} />
-        <Route path="testimonials" element={<Testimonials />} />
-        <Route path="blog" element={<Blog />} />
-        <Route path="contact" element={<Contact />} />
-      </Route>
 
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>
@@ -69,20 +55,5 @@ export default function App() {
         </Route>
       </Routes>
     </BrowserRouter>
-      {/* Admin Routes */}
-      <Route path="/admin" element={<AdminLayout />}>
-        <Route index element={<AdminDashboard />} />
-        <Route path="appointments" element={<AdminAppointments />} />
-        <Route path="barbers" element={<AdminBarbers />} />
-        <Route path="services" element={<AdminServices />} />
-        <Route path="customers" element={<AdminCustomers />} />
-        <Route path="gallery" in element={<AdminGallery />} />
-        <Route path="products" element={<AdminProducts />} />
-        <Route path="blog" element={<AdminBlogs />} />
-        <Route path="testimonials" element={<AdminTestimonials />} />
-        <Route path="contacts" element={<AdminContacts />} />
-        <Route path="settings" element={<AdminSettings />} />
-      </Route>
-    </Routes>
   );
 }

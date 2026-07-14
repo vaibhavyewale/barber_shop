@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import path from 'path';
 import { createServer as createViteServer } from 'vite';
@@ -14,6 +15,12 @@ const db = {
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_ANON_KEY;
 const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
+
+if (supabase) {
+  console.log('Successfully connected to Supabase.');
+} else {
+  console.log('Supabase keys not found. Running in in-memory mode. Make sure you have a .env file with SUPABASE_URL and SUPABASE_ANON_KEY.');
+}
 
 async function startServer() {
   const app = express();
@@ -67,15 +74,20 @@ async function startServer() {
   // Admin summary stats
   apiRouter.get('/admin/stats', async (req, res) => {
     let appointmentCount = db.appointments.length;
+    let customerCount = db.users.length;
     let barberCount = 0;
     
     if (supabase) {
       try {
         const { count, error } = await supabase.from('appointments').select('*', { count: 'exact', head: true });
         if (!error && count !== null) appointmentCount = count;
+
+        const { count: cCount, error: cError } = await supabase.from('users').select('*', { count: 'exact', head: true });
+        if (!cError && cCount !== null) customerCount = cCount;
         
         const { count: bCount, error: bError } = await supabase.from('barbers').select('*', { count: 'exact', head: true });
         if (!bError && bCount !== null) barberCount = bCount;
+
       } catch (err) {
         console.error('Error fetching stats:', err);
       }
@@ -84,7 +96,7 @@ async function startServer() {
     res.json({
       revenue: '$12,450',
       appointments: appointmentCount,
-      customers: 420,
+      customers: customerCount,
       activeBarbers: barberCount || 5
     });
   });
@@ -98,6 +110,7 @@ async function startServer() {
           if (error) throw error;
           res.json(data);
         } catch (err) {
+          console.error(`Error in ${tableName} GET:`, err);
           res.status(500).json({ error: `Failed to fetch ${tableName}` });
         }
       } else {
